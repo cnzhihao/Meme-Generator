@@ -26,17 +26,11 @@ This skill assumes OpenCLI's `opencli-browser` skill is available. If browser co
    - Pick one matching image. Prefer clear, inspectable images over blurry or tiny files.
    - If the request names a specific joke or image, use that unless the file is missing.
 4. Generate the meme:
-   - Use OpenCLI browser automation to open `https://meme-generator.fhxqtech.com`.
-   - Prefer the Agent image URL path over the native file picker:
-     1. Convert the selected image to a temporary data URL file using `skills/meme-generator/scripts/image-to-data-url-file.sh`.
-     2. Fill `#agentImageUrl` and click `#agentLoadImageBtn` using `skills/meme-generator/scripts/fill-agent-image-url.sh`.
-     3. Verify the canvas dimensions match the loaded image.
-     4. Delete the temporary data URL file after the PNG is generated.
-   - For non-production local testing, a CORS-enabled local image URL may also work. On the production HTTPS site, prefer data URLs to avoid mixed-content blocking.
-   - Use the native file input only as a fallback.
-   - Fill the caption textarea with the selected or adapted text.
-   - Adjust advanced controls only when needed for readability.
-   - Download the PNG.
+   - Prefer the dedicated OpenCLI command:
+     `opencli meme-generator generate --image <image> --textFile <text-file> --output <png> -f json`
+   - The command reads the image file in Node.js, sends a data URL to the page automation API, exports PNG directly from canvas, and writes the PNG to disk.
+   - If the command is not installed, ask the user to install the repo's `opencli-plugin` first. Do not use native file input upload as the default path.
+   - Manual browser fallback only if the command is unavailable and the user explicitly accepts a fallback.
 5. Save the result:
    - Move the downloaded PNG to the requested output directory.
    - Use a clear filename based on the topic plus a timestamp, for example `meme-product-launch-20260625-143000.png`.
@@ -46,7 +40,7 @@ This skill assumes OpenCLI's `opencli-browser` skill is available. If browser co
 
 - Prefer structured OpenCLI browser commands over manual screenshot guessing.
 - Wait for the page and canvas to render before downloading.
-- Do not print data URLs or base64 strings into the conversation. Store them in tmp files and redirect OpenCLI fill output to tmp logs.
+- Do not print data URLs or base64 strings into the conversation. Prefer `opencli meme-generator generate`, which keeps base64 inside the command process.
 - Native file upload can be blocked by Chrome with `Not allowed`. Do not ask the user to upload manually; use the Agent image URL path instead.
 - If the downloaded file location is ambiguous, check the user's Downloads folder first and use modification time to identify the newest meme PNG.
 

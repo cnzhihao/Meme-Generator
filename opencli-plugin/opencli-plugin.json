@@ -1,0 +1,6 @@
+{
+  "name": "meme-generator",
+  "version": "0.1.0",
+  "opencli": ">=1.8.4",
+  "description": "通过 Meme Generator 网页生成梗图 PNG"
+}

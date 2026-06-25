@@ -853,6 +853,45 @@
 
     window.addEventListener("resize", fitCanvasToView);
 
+    window.memeGenerator = {
+      async loadImageDataUrl(dataUrl) {
+        if (typeof dataUrl !== "string" || !dataUrl.startsWith("data:image/")) {
+          throw new Error("loadImageDataUrl expects a data:image URL");
+        }
+        agentImageUrl.value = dataUrl;
+        await loadImageFromSrc(dataUrl);
+        return {
+          width: canvas.width,
+          height: canvas.height
+        };
+      },
+      setText(text) {
+        memeText.value = String(text || "");
+        render();
+        return {
+          length: memeText.value.length
+        };
+      },
+      exportPng() {
+        render();
+        const dataUrl = canvas.toDataURL("image/png");
+        const comma = dataUrl.indexOf(",");
+        return {
+          base64: comma >= 0 ? dataUrl.slice(comma + 1) : dataUrl,
+          width: canvas.width,
+          height: canvas.height
+        };
+      },
+      getState() {
+        return {
+          width: canvas.width,
+          height: canvas.height,
+          hasImage,
+          textLength: memeText.value.length
+        };
+      }
+    };
+
     render();
   </script>
 </body>

@@ -1,0 +1,9 @@
+{
+  "name": "opencli-plugin-meme-generator",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "通过 OpenCLI 生成梗图 PNG",
+  "peerDependencies": {
+    "@jackwener/opencli": ">=1.8.4"
+  }
+}
