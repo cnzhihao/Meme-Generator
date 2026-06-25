@@ -28,10 +28,10 @@ This skill assumes OpenCLI's `opencli-browser` skill is available. If browser co
 4. Generate the meme:
    - Use OpenCLI browser automation to open `https://meme-generator.fhxqtech.com`.
    - Prefer the Agent image URL path over the native file picker:
-     1. Convert the selected image to a data URL, for example `data:image/jpeg;base64,...`.
-     2. Fill `#agentImageUrl` with the data URL.
-     3. Click `#agentLoadImageBtn`.
-     4. Verify the canvas dimensions match the loaded image.
+     1. Convert the selected image to a temporary data URL file using `skills/meme-generator/scripts/image-to-data-url-file.sh`.
+     2. Fill `#agentImageUrl` and click `#agentLoadImageBtn` using `skills/meme-generator/scripts/fill-agent-image-url.sh`.
+     3. Verify the canvas dimensions match the loaded image.
+     4. Delete the temporary data URL file after the PNG is generated.
    - For non-production local testing, a CORS-enabled local image URL may also work. On the production HTTPS site, prefer data URLs to avoid mixed-content blocking.
    - Use the native file input only as a fallback.
    - Fill the caption textarea with the selected or adapted text.
@@ -46,6 +46,7 @@ This skill assumes OpenCLI's `opencli-browser` skill is available. If browser co
 
 - Prefer structured OpenCLI browser commands over manual screenshot guessing.
 - Wait for the page and canvas to render before downloading.
+- Do not print data URLs or base64 strings into the conversation. Store them in tmp files and redirect OpenCLI fill output to tmp logs.
 - Native file upload can be blocked by Chrome with `Not allowed`. Do not ask the user to upload manually; use the Agent image URL path instead.
 - If the downloaded file location is ambiguous, check the user's Downloads folder first and use modification time to identify the newest meme PNG.
 
