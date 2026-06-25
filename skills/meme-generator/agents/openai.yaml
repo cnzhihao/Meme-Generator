@@ -1,6 +1,0 @@
-interface:
-  display_name: "Meme Generator"
-  short_description: "Generate meme images from local jokes and images"
-  default_prompt: "Use $meme-generator to turn my local joke and image library into a saved meme PNG."
-policy:
-  allow_implicit_invocation: true

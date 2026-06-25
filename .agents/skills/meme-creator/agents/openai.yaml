@@ -1,0 +1,6 @@
+interface:
+  display_name: "Meme Creator"
+  short_description: "Generate matching meme PNGs from local images"
+  default_prompt: "Use $meme-creator to generate a meme PNG from my local image and caption."
+policy:
+  allow_implicit_invocation: true
