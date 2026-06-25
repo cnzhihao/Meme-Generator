@@ -28,10 +28,11 @@ This skill assumes OpenCLI's `opencli-browser` skill is available. If browser co
 4. Generate the meme:
    - Use OpenCLI browser automation to open `https://meme-generator.fhxqtech.com`.
    - Prefer the Agent image URL path over the native file picker:
-     1. Start a temporary local static server for the selected image with `Access-Control-Allow-Origin: *`.
-     2. Fill `#agentImageUrl` with the served image URL, for example `http://127.0.0.1:8790/image.jpg`.
+     1. Convert the selected image to a data URL, for example `data:image/jpeg;base64,...`.
+     2. Fill `#agentImageUrl` with the data URL.
      3. Click `#agentLoadImageBtn`.
      4. Verify the canvas dimensions match the loaded image.
+   - For non-production local testing, a CORS-enabled local image URL may also work. On the production HTTPS site, prefer data URLs to avoid mixed-content blocking.
    - Use the native file input only as a fallback.
    - Fill the caption textarea with the selected or adapted text.
    - Adjust advanced controls only when needed for readability.
