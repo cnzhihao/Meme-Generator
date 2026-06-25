@@ -27,7 +27,12 @@ This skill assumes OpenCLI's `opencli-browser` skill is available. If browser co
    - If the request names a specific joke or image, use that unless the file is missing.
 4. Generate the meme:
    - Use OpenCLI browser automation to open `https://meme-generator.fhxqtech.com`.
-   - Upload the chosen image through the image file input.
+   - Prefer the Agent image URL path over the native file picker:
+     1. Start a temporary local static server for the selected image with `Access-Control-Allow-Origin: *`.
+     2. Fill `#agentImageUrl` with the served image URL, for example `http://127.0.0.1:8790/image.jpg`.
+     3. Click `#agentLoadImageBtn`.
+     4. Verify the canvas dimensions match the loaded image.
+   - Use the native file input only as a fallback.
    - Fill the caption textarea with the selected or adapted text.
    - Adjust advanced controls only when needed for readability.
    - Download the PNG.
@@ -40,7 +45,7 @@ This skill assumes OpenCLI's `opencli-browser` skill is available. If browser co
 
 - Prefer structured OpenCLI browser commands over manual screenshot guessing.
 - Wait for the page and canvas to render before downloading.
-- If OpenCLI cannot set the file upload control, explain the blocker and ask the user to upload the selected image manually, then continue filling text, downloading, and saving.
+- Native file upload can be blocked by Chrome with `Not allowed`. Do not ask the user to upload manually; use the Agent image URL path instead.
 - If the downloaded file location is ambiguous, check the user's Downloads folder first and use modification time to identify the newest meme PNG.
 
 ## Output

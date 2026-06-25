@@ -260,6 +260,21 @@
     }
     .drop:hover { border-color: var(--hot); background: #fff; }
     .drop:active { transform: translateY(1px); }
+    .file-input-automation,
+    .agent-image-url,
+    .agent-load-image-btn {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      opacity: 0.01;
+      pointer-events: none;
+    }
+    .agent-load-image-btn {
+      pointer-events: auto;
+    }
     .drop-ico {
       display: block;
       font-size: 20px;

@@ -4,6 +4,7 @@
     const ctx = canvas.getContext("2d");
 
     const imageInput = $("imageInput");
+    const agentImageUrl = $("agentImageUrl");
     const memeText = $("memeText");
     const agentPrompt = `你现在要帮我把 Meme Generator 接入 OpenCLI，并安装用于自动生成梗图的 Skill。请按下面步骤执行，并在每一步完成后继续下一步：
 
@@ -206,6 +207,9 @@
     function loadImageFromSrc(src) {
       return new Promise((resolve, reject) => {
         const img = new Image();
+        if (/^https?:\/\//i.test(src)) {
+          img.crossOrigin = "anonymous";
+        }
         img.onload = () => {
           sourceImage = img;
           hasImage = true;
@@ -225,6 +229,23 @@
       reader.onload = () => loadImageFromSrc(reader.result).catch(() => alert("图片加载失败，请换一张图片。"));
       reader.readAsDataURL(file);
     });
+
+    function loadAgentImageUrl() {
+      const src = agentImageUrl.value.trim();
+      if (!src) return;
+      if (!/^(https?:\/\/|data:image\/|blob:)/i.test(src)) return;
+      loadImageFromSrc(src).catch(() => alert("Agent 图片加载失败，请检查 URL 或 CORS。"));
+    }
+
+    agentImageUrl.addEventListener("input", () => {
+      window.clearTimeout(agentImageUrl._loadTimer);
+      agentImageUrl._loadTimer = window.setTimeout(loadAgentImageUrl, 250);
+    });
+    agentImageUrl.addEventListener("change", loadAgentImageUrl);
+    agentImageUrl.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") loadAgentImageUrl();
+    });
+    $("agentLoadImageBtn").addEventListener("click", loadAgentImageUrl);
 
     controls.forEach(id => {
       const el = $(id);
@@ -272,6 +293,7 @@
       sourceImage = new Image();
       hasImage = false;
       imageInput.value = "";
+      agentImageUrl.value = "";
       render();
     });
 

@@ -49,8 +49,30 @@
           <span class="drop-ico">↥</span>
           <strong>点击选择图片</strong>
           <small>导出尺寸 = 原图尺寸 · 建议 1:1 或竖图</small>
-          <input id="imageInput" type="file" accept="image/*" hidden />
         </label>
+        <input
+          id="imageInput"
+          class="file-input-automation"
+          type="file"
+          accept="image/*"
+          aria-label="上传梗图图片"
+          data-testid="meme-image-input"
+        />
+        <input
+          id="agentImageUrl"
+          class="agent-image-url"
+          type="text"
+          autocomplete="off"
+          aria-label="Agent image URL"
+          data-testid="meme-agent-image-url"
+        />
+        <button
+          id="agentLoadImageBtn"
+          class="agent-load-image-btn"
+          type="button"
+          aria-label="Agent load image"
+          data-testid="meme-agent-load-image"
+        >Load image</button>
         <button id="clearImageBtn" class="btn ghost-danger" type="button">清空图片</button>
       </section>
 
