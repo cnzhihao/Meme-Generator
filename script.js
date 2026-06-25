@@ -5,6 +5,21 @@
 
     const imageInput = $("imageInput");
     const memeText = $("memeText");
+    const agentPrompt = `你现在要帮我把 Meme Generator 接入 OpenCLI，并安装用于自动生成梗图的 Skill。请按下面步骤执行，并在每一步完成后继续下一步：
+
+1. 检查本机 Node.js 版本是否 >= 21.0.0；如果版本不够，请告诉我需要先升级 Node.js。
+2. 安装或更新 OpenCLI：
+   npm install -g @jackwener/opencli
+3. 确认 Chrome 已安装 Browser Bridge 扩展：
+   https://chromewebstore.google.com/detail/browser-bridge/jbajonmonccnibicpjlfkkcenpjcpedo
+4. 运行诊断：
+   opencli doctor
+5. 安装 OpenCLI 浏览器 Skill：
+   npx skills add jackwener/opencli --skill opencli-browser
+6. 安装 Meme Generator Skill：
+   npx skills add cnzhihao/Meme-Generator --skill meme-generator
+
+安装完成后，后续我会用 $meme-generator 让你根据我的本地知识库目录、输出目录和梗图主题，自动打开 https://meme-generator.fhxqtech.com，选择段子和图片，生成 PNG，并保存到我指定的位置。`;
 
     const controls = [
       "fontFamily", "fontWeight", "textColor", "boxColor", "fontSizePct", "lineHeight",
@@ -258,6 +273,47 @@
       hasImage = false;
       imageInput.value = "";
       render();
+    });
+
+    const agentPromptBtn = $("agentPromptBtn");
+    const agentPromptModal = $("agentPromptModal");
+    const agentPromptText = $("agentPromptText");
+    const closeAgentPromptBtn = $("closeAgentPromptBtn");
+    const copyAgentPromptBtn = $("copyAgentPromptBtn");
+
+    function openAgentPrompt() {
+      agentPromptText.value = agentPrompt;
+      agentPromptModal.hidden = false;
+      copyAgentPromptBtn.textContent = "复制 Prompt";
+      window.setTimeout(() => agentPromptText.focus(), 0);
+    }
+
+    function closeAgentPrompt() {
+      agentPromptModal.hidden = true;
+      agentPromptBtn.focus();
+    }
+
+    async function copyAgentPrompt() {
+      agentPromptText.select();
+      try {
+        await navigator.clipboard.writeText(agentPrompt);
+      } catch (error) {
+        document.execCommand("copy");
+      }
+      copyAgentPromptBtn.textContent = "已复制";
+      window.setTimeout(() => {
+        copyAgentPromptBtn.textContent = "复制 Prompt";
+      }, 1400);
+    }
+
+    agentPromptBtn.addEventListener("click", openAgentPrompt);
+    closeAgentPromptBtn.addEventListener("click", closeAgentPrompt);
+    copyAgentPromptBtn.addEventListener("click", copyAgentPrompt);
+    agentPromptModal.addEventListener("click", (event) => {
+      if (event.target === agentPromptModal) closeAgentPrompt();
+    });
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !agentPromptModal.hidden) closeAgentPrompt();
     });
 
     window.addEventListener("resize", fitCanvasToView);

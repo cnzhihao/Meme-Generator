@@ -15,14 +15,29 @@
       <span class="brand-mark">MEME</span>
       <span class="brand-zh">梗图实验室</span>
     </div>
-    <button id="downloadBtn" class="stamp" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 3v12" />
-        <path d="m7 11 5 5 5-5" />
-        <path d="M5 21h14" />
-      </svg>
-      下载 PNG
-    </button>
+    <div class="top-actions">
+      <button id="agentPromptBtn" class="stamp stamp-secondary" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2v4" />
+          <path d="M12 18v4" />
+          <path d="M4.93 4.93 7.76 7.76" />
+          <path d="m16.24 16.24 2.83 2.83" />
+          <path d="M2 12h4" />
+          <path d="M18 12h4" />
+          <path d="m4.93 19.07 2.83-2.83" />
+          <path d="m16.24 7.76 2.83-2.83" />
+        </svg>
+        Agent Prompt
+      </button>
+      <button id="downloadBtn" class="stamp" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12" />
+          <path d="m7 11 5 5 5-5" />
+          <path d="M5 21h14" />
+        </svg>
+        下载 PNG
+      </button>
+    </div>
   </header>
 
   <main>
@@ -150,6 +165,27 @@
       </div>
     </section>
   </main>
+
+  <div id="agentPromptModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="agentPromptTitle" hidden>
+    <div class="modal-panel">
+      <div class="modal-head">
+        <div>
+          <p class="modal-kicker">OpenCLI</p>
+          <h2 id="agentPromptTitle">Agent Prompt</h2>
+        </div>
+        <button id="closeAgentPromptBtn" class="icon-btn" type="button" aria-label="关闭">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+            <path d="M6 6l12 12" />
+            <path d="M18 6 6 18" />
+          </svg>
+        </button>
+      </div>
+      <textarea id="agentPromptText" class="prompt-box" readonly spellcheck="false"></textarea>
+      <div class="modal-actions">
+        <button id="copyAgentPromptBtn" class="stamp" type="button">复制 Prompt</button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
