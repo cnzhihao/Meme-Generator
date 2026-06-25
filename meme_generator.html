@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MEME · 梗图实验室</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* dark workspace zone */
+      --ink: #0F0F11;
+      --ink-2: #17171A;
+      --ink-line: #26262B;
+      --on-ink: #ECECEC;
+      --on-ink-dim: #8C8C92;
+
+      /* warm paper control deck */
+      --paper: #F6F2E9;
+      --paper-card: #FFFDF8;
+      --black: #16140F;
+      --muted: #6E675A;
+      --line: #E2DAC7;
+      --field-bg: #FFFFFF;
+
+      /* signature + danger */
+      --hi: #FFE100;
+      --hi-ink: #1A1500;
+      --hot: #FF4D2E;
+
+      --r: 14px;
+      --r-sm: 10px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: var(--ink);
+      color: var(--on-ink);
+      font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---------- top bar ---------- */
+    .topbar {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 28px;
+      background: var(--ink);
+      border-bottom: 1px solid var(--ink-line);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .brand-mark {
+      font-family: 'Anton', Impact, 'Arial Narrow', sans-serif;
+      font-size: 30px;
+      letter-spacing: .05em;
+      line-height: .9;
+      color: var(--hi-ink);
+      background: var(--hi);
+      padding: 3px 11px 5px;
+      display: inline-block;
+      transform: skewX(-6deg);
+      border-radius: 2px;
+    }
+
+    .brand-zh {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      color: var(--on-ink);
+    }
+
+    .stamp {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      font-family: 'Anton', Impact, sans-serif;
+      font-size: 15px;
+      letter-spacing: .06em;
+      color: var(--ink);
+      background: var(--on-ink);
+      padding: 11px 20px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      transition: transform .08s ease, background .15s ease;
+    }
+    .stamp:hover { background: #fff; }
+    .stamp:active { transform: translateY(1px); }
+    .stamp svg {
+      width: 15px;
+      height: 15px;
+      display: block;
+      flex: 0 0 auto;
+    }
+
+    /* ---------- layout: only the deck may scroll ---------- */
+    main {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(340px, 400px) minmax(0, 1fr);
+    }
+
+    /* ---------- control deck (paper) ---------- */
+    .deck {
+      background: var(--paper);
+      border-right: 1px solid var(--line);
+      padding: 22px 22px 30px;
+      overflow: auto;
+      min-height: 0;
+      scrollbar-gutter: stable;
+    }
+
+    .grp {
+      padding: 0 0 22px;
+      margin: 0 0 22px;
+      border-bottom: 1px dashed var(--line);
+    }
+    .grp:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+
+    .grp-h {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin: 0 0 14px;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+    .grp-h .num {
+      font-family: 'Anton', Impact, sans-serif;
+      font-size: 18px;
+      letter-spacing: .04em;
+      color: var(--hot);
+      line-height: 1;
+    }
+
+    .field { margin: 0 0 12px; }
+    .field:last-child { margin-bottom: 0; }
+
+    .fld {
+      display: block;
+      font-size: 10.5px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--muted);
+      margin: 0 0 6px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .deck input[type="text"],
+    .deck input[type="number"],
+    .deck select,
+    .deck textarea {
+      width: 100%;
+      background: var(--field-bg);
+      border: 1px solid var(--line);
+      border-radius: var(--r-sm);
+      padding: 9px 11px;
+      font: inherit;
+      color: var(--black);
+      outline: none;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .deck input[type="color"] {
+      width: 100%;
+      height: 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--r-sm);
+      padding: 4px;
+      background: var(--field-bg);
+      cursor: pointer;
+    }
+    .deck textarea {
+      min-height: 200px;
+      resize: vertical;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+    .deck input:focus,
+    .deck select:focus,
+    .deck textarea:focus {
+      border-color: var(--black);
+      box-shadow: 0 0 0 3px rgba(22, 20, 15, .08);
+    }
+
+    /* slider row */
+    .slider {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+    .slider input[type="range"] {
+      width: 100%;
+      accent-color: var(--hot);
+      cursor: pointer;
+    }
+    .pill {
+      min-width: 58px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--hi);
+      background: var(--ink);
+      border-radius: 999px;
+      padding: 5px 9px;
+    }
+
+    /* dropzone */
+    .drop {
+      display: block;
+      border: 1.5px dashed var(--line);
+      border-radius: var(--r);
+      padding: 22px 16px;
+      text-align: center;
+      cursor: pointer;
+      background: var(--paper-card);
+      transition: border-color .15s ease, background .15s ease, transform .08s ease;
+    }
+    .drop:hover { border-color: var(--hot); background: #fff; }
+    .drop:active { transform: translateY(1px); }
+    .drop-ico {
+      display: block;
+      font-size: 20px;
+      line-height: 1;
+      color: var(--hot);
+      margin-bottom: 8px;
+    }
+    .drop strong { display: block; font-weight: 700; color: var(--black); font-size: 14px; }
+    .drop small { display: block; margin-top: 4px; color: var(--muted); font-size: 11.5px; }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: var(--r-sm);
+      padding: 10px 14px;
+      font: inherit;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: transform .08s ease, background .15s ease, color .15s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn.ghost-danger {
+      width: 100%;
+      margin-top: 10px;
+      background: transparent;
+      color: var(--hot);
+      border: 1px solid var(--line);
+    }
+    .btn.ghost-danger:hover { background: #fff; border-color: var(--hot); }
+
+    /* advanced (03 + 04) */
+    .advanced {
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      background: var(--paper-card);
+      overflow: hidden;
+    }
+    .advanced > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      list-style: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+    .advanced > summary::-webkit-details-marker { display: none; }
+    .advanced > summary .adv-tag {
+      font-size: 10.5px;
+      letter-spacing: .08em;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .advanced > summary .adv-tag::after { content: "＋ 展开"; }
+    .advanced[open] > summary { border-bottom: 1px solid var(--line); }
+    .advanced[open] > summary .adv-tag::after { content: "－ 收起"; }
+    .adv-body { padding: 18px 16px 6px; }
+
+    /* ---------- stage (dark workspace, never scrolls) ---------- */
+    .stage {
+      background: var(--ink);
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 20px;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .canvas-wrap {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: var(--r);
+      border: 1px solid var(--ink-line);
+      padding: 24px;
+      background-color: #0a0a0c;
+      background-image:
+        linear-gradient(45deg, #15151a 25%, transparent 25%),
+        linear-gradient(-45deg, #15151a 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #15151a 75%),
+        linear-gradient(-45deg, transparent 75%, #15151a 75%);
+      background-size: 22px 22px;
+      background-position: 0 0, 0 11px, 11px -11px, -11px 0;
+    }
+
+    canvas {
+      display: block;
+      flex: 0 0 auto;
+      border-radius: 4px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, .55);
+      background: #fff;
+    }
+
+    /* ---------- a11y / motion ---------- */
+    :focus-visible {
+      outline: 2px solid var(--hi);
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+
+    /* ---------- responsive ---------- */
+    @media (max-width: 900px) {
+      .topbar { padding: 12px 16px; }
+      .brand-sub { display: none; }
+
+      main {
+        display: flex;
+        flex-direction: column;
+      }
+      .deck {
+        flex: 0 0 auto;
+        max-height: 48vh;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .stage {
+        flex: 1 1 auto;
+        min-height: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">MEME</span>
+      <span class="brand-zh">梗图实验室</span>
+    </div>
+    <button id="downloadBtn" class="stamp" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 3v12" />
+        <path d="m7 11 5 5 5-5" />
+        <path d="M5 21h14" />
+      </svg>
+      下载 PNG
+    </button>
+  </header>
+
+  <main>
+    <aside class="deck">
+      <!-- 01 图片 -->
+      <section class="grp">
+        <h2 class="grp-h"><span class="num">01</span> 图片</h2>
+        <label class="drop" for="imageInput">
+          <span class="drop-ico">↥</span>
+          <strong>点击选择图片</strong>
+          <small>导出尺寸 = 原图尺寸 · 建议 1:1 或竖图</small>
+          <input id="imageInput" type="file" accept="image/*" hidden />
+        </label>
+        <button id="clearImageBtn" class="btn ghost-danger" type="button">清空图片</button>
+      </section>
+
+      <!-- 02 文案 -->
+      <section class="grp">
+        <h2 class="grp-h"><span class="num">02</span> 文案</h2>
+        <textarea id="memeText" spellcheck="false">第一次见女朋友家长叔叔问我：喝酒吗？
+我：不喝
+又问：抽烟吗？
+我：不抽
+叔叔又问：打牌吗？
+我：不打
+叔叔诧异的望向女朋友女朋友忙说：他好色！
+叔叔一拍大腿：那没事了是个正常男人来坐，上菜！</textarea>
+      </section>
+
+      <!-- 高级设置：03 样式 + 04 排版 -->
+      <details class="advanced">
+        <summary>
+          <span class="adv-label">高级设置</span>
+          <span class="adv-tag"></span>
+        </summary>
+        <div class="adv-body">
+          <!-- 03 样式 -->
+          <section class="grp">
+            <h2 class="grp-h"><span class="num">03</span> 样式</h2>
+            <div class="field">
+              <label class="fld" for="fontFamily">字体</label>
+              <select id="fontFamily">
+                <option value='-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif'>系统无衬线字体</option>
+                <option value='Arial, Helvetica, sans-serif'>Arial / Helvetica</option>
+                <option value='"Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'>Noto Sans SC / 思源黑体</option>
+                <option value='"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'>中文系统黑体</option>
+              </select>
+            </div>
+            <div class="grid-2">
+              <div class="field">
+                <label class="fld" for="fontWeight">字重</label>
+                <select id="fontWeight">
+                  <option value="600">半粗 600</option>
+                  <option value="700" selected>粗体 700</option>
+                  <option value="800">特粗 800</option>
+                  <option value="900">黑体 900</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="fld" for="textColor">文字颜色</label>
+                <input id="textColor" type="color" value="#000000" />
+              </div>
+            </div>
+            <div class="field">
+              <label class="fld" for="boxColor">衬底颜色</label>
+              <input id="boxColor" type="color" value="#ffffff" />
+            </div>
+          </section>
+
+          <!-- 04 排版 -->
+          <section class="grp">
+            <h2 class="grp-h"><span class="num">04</span> 排版</h2>
+            <div class="grid-2">
+              <div class="field">
+                <label class="fld">字号（占图宽）</label>
+                <div class="slider">
+                  <input id="fontSizePct" type="range" min="2" max="10" step="0.1" value="4.4" />
+                  <span id="fontSizePctValue" class="pill">4.4%</span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="fld">行距</label>
+                <div class="slider">
+                  <input id="lineHeight" type="range" min="1.0" max="2.0" step="0.05" value="1.6" />
+                  <span id="lineHeightValue" class="pill">1.60</span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="fld">衬底左右边距</label>
+                <div class="slider">
+                  <input id="padXPct" type="range" min="0.1" max="1.8" step="0.05" value="0.25" />
+                  <span id="padXPctValue" class="pill">0.25em</span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="fld">衬底高度</label>
+                <div class="slider">
+                  <input id="boxHeightEm" type="range" min="1.0" max="1.6" step="0.02" value="1.28" />
+                  <span id="boxHeightEmValue" class="pill">1.28em</span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="fld">衬底圆角</label>
+                <div class="slider">
+                  <input id="radiusEm" type="range" min="0" max="0.5" step="0.02" value="0" />
+                  <span id="radiusEmValue" class="pill">0em</span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="fld">单行最大宽度</label>
+                <div class="slider">
+                  <input id="maxWidthPct" type="range" min="40" max="96" step="1" value="82" />
+                  <span id="maxWidthPctValue" class="pill">82%</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </details>
+    </aside>
+
+    <section class="stage">
+      <div class="canvas-wrap">
+        <canvas id="canvas" width="1080" height="1080" aria-label="梗图预览"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const canvas = $("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const imageInput = $("imageInput");
+    const memeText = $("memeText");
+
+    const controls = [
+      "fontFamily", "fontWeight", "textColor", "boxColor", "fontSizePct", "lineHeight",
+      "padXPct", "boxHeightEm", "radiusEm", "maxWidthPct"
+    ];
+
+    let sourceImage = new Image();
+    let hasImage = false;
+
+    function roundedRectPath(ctx, x, y, w, h, r) {
+      r = Math.max(0, Math.min(r, w / 2, h / 2));
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function updateControlLabels() {
+      $("fontSizePctValue").textContent = Number($("fontSizePct").value).toFixed(1) + "%";
+      $("lineHeightValue").textContent = Number($("lineHeight").value).toFixed(2);
+      $("padXPctValue").textContent = Number($("padXPct").value).toFixed(2) + "em";
+      $("boxHeightEmValue").textContent = Number($("boxHeightEm").value).toFixed(2) + "em";
+      $("radiusEmValue").textContent = Number($("radiusEm").value).toFixed(2) + "em";
+      $("maxWidthPctValue").textContent = Number($("maxWidthPct").value).toFixed(0) + "%";
+    }
+
+    function getRawLines() {
+      return memeText.value
+        .replace(/\r\n/g, "\n")
+        .split("\n")
+        .map(line => line.trim())
+        .filter(Boolean);
+    }
+
+    function wrapLine(line, maxWidth) {
+      if (!line) return [];
+
+      const result = [];
+      let current = "";
+      const chars = Array.from(line);
+
+      for (const ch of chars) {
+        const test = current + ch;
+        if (ctx.measureText(test).width <= maxWidth || current.length === 0) {
+          current = test;
+        } else {
+          result.push(current);
+          current = ch;
+        }
+      }
+
+      if (current) result.push(current);
+      return result;
+    }
+
+    function fitCanvasToImage() {
+      if (hasImage && sourceImage.naturalWidth && sourceImage.naturalHeight) {
+        canvas.width = sourceImage.naturalWidth;
+        canvas.height = sourceImage.naturalHeight;
+      } else {
+        canvas.width = 1080;
+        canvas.height = 1080;
+      }
+    }
+
+    // Equal-ratio fit into the preview frame; height is preferred, but a
+    // landscape image is capped by the frame width so it never stretches.
+    function fitCanvasToView() {
+      const wrap = document.querySelector(".canvas-wrap");
+      if (!wrap) return;
+      const padW = wrap.clientWidth - 48;   // minus horizontal padding (24 * 2)
+      const padH = wrap.clientHeight - 48;  // minus vertical padding (24 * 2)
+      if (padW <= 0 || padH <= 0) return;
+
+      const ratio = canvas.width / canvas.height;
+      let dispH = padH;
+      let dispW = dispH * ratio;
+      if (dispW > padW) {            // landscape overflow: fall back to width
+        dispW = padW;
+        dispH = dispW / ratio;
+      }
+      canvas.style.width = Math.floor(dispW) + "px";
+      canvas.style.height = Math.floor(dispH) + "px";
+    }
+
+    function drawPlaceholder(w, h) {
+      const cell = Math.max(24, Math.round(w / 24));
+
+      ctx.fillStyle = "#f1f5f9";
+      ctx.fillRect(0, 0, w, h);
+
+      for (let y = 0; y < h; y += cell) {
+        for (let x = 0; x < w; x += cell) {
+          if (((x / cell) + (y / cell)) % 2 === 0) {
+            ctx.fillStyle = "#e2e8f0";
+            ctx.fillRect(x, y, cell, cell);
+          }
+        }
+      }
+
+      ctx.fillStyle = "#64748b";
+      ctx.font = `700 ${Math.max(28, w * 0.035)}px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("上传图片后自动预览", w / 2, h / 2);
+    }
+
+    function render() {
+      updateControlLabels();
+      fitCanvasToImage();
+
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      if (hasImage) {
+        ctx.drawImage(sourceImage, 0, 0, w, h);
+      } else {
+        drawPlaceholder(w, h);
+      }
+
+      const fontFamily = $("fontFamily").value;
+      const fontWeight = $("fontWeight").value;
+      const fontSize = Math.max(12, w * Number($("fontSizePct").value) / 100);
+      const lineHeight = Number($("lineHeight").value);
+      const padX = fontSize * Number($("padXPct").value);
+      const boxH = fontSize * Number($("boxHeightEm").value);
+      const radius = fontSize * Number($("radiusEm").value);
+      const maxLineWidth = w * Number($("maxWidthPct").value) / 100 - padX * 2;
+      const textColor = $("textColor").value;
+      const boxColor = $("boxColor").value;
+
+      ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+
+      const visualLines = [];
+      for (const raw of getRawLines()) {
+        visualLines.push(...wrapLine(raw, maxLineWidth));
+      }
+
+      const step = fontSize * lineHeight;
+      const totalH = visualLines.length > 0 ? ((visualLines.length - 1) * step + boxH) : 0;
+      const top = Math.max(0, (h - totalH) / 2);
+      const measuredLines = visualLines.map(text => {
+        const lineW = Math.ceil(ctx.measureText(text).width);
+        return {
+          text,
+          lineW,
+          boxW: Math.min(w, lineW + padX * 2)
+        };
+      });
+      const blockW = measuredLines.reduce((max, line) => Math.max(max, line.boxW), 0);
+      const blockX = (w - blockW) / 2;
+
+      for (let i = 0; i < measuredLines.length; i++) {
+        const { text, boxW } = measuredLines[i];
+        const x = blockX;
+        const boxY = top + i * step;
+
+        ctx.fillStyle = boxColor;
+        if (radius > 0) {
+          roundedRectPath(ctx, x, boxY, boxW, boxH, radius);
+          ctx.fill();
+        } else {
+          ctx.fillRect(x, boxY, boxW, boxH);
+        }
+
+        ctx.fillStyle = textColor;
+        ctx.fillText(text, x + padX, boxY + boxH / 2);
+      }
+
+      fitCanvasToView();
+    }
+
+    function loadImageFromSrc(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          sourceImage = img;
+          hasImage = true;
+          render();
+          resolve();
+        };
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
+
+    imageInput.addEventListener("change", async (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => loadImageFromSrc(reader.result).catch(() => alert("图片加载失败，请换一张图片。"));
+      reader.readAsDataURL(file);
+    });
+
+    controls.forEach(id => {
+      const el = $(id);
+      el.addEventListener("input", render);
+      el.addEventListener("change", render);
+    });
+
+    memeText.addEventListener("input", () => {
+      window.clearTimeout(memeText._renderTimer);
+      memeText._renderTimer = window.setTimeout(render, 120);
+    });
+
+    $("downloadBtn").addEventListener("click", () => {
+      render();
+
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          alert("导出失败，请重试。");
+          return;
+        }
+
+        const now = new Date();
+        const stamp = [
+          now.getFullYear(),
+          String(now.getMonth() + 1).padStart(2, "0"),
+          String(now.getDate()).padStart(2, "0"),
+          "-",
+          String(now.getHours()).padStart(2, "0"),
+          String(now.getMinutes()).padStart(2, "0"),
+          String(now.getSeconds()).padStart(2, "0")
+        ].join("");
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `meme-${stamp}.png`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }, "image/png");
+    });
+
+    $("clearImageBtn").addEventListener("click", () => {
+      sourceImage = new Image();
+      hasImage = false;
+      imageInput.value = "";
+      render();
+    });
+
+    window.addEventListener("resize", fitCanvasToView);
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MEME · 梗图实验室</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">MEME</span>
+      <span class="brand-zh">梗图实验室</span>
+    </div>
+    <button id="downloadBtn" class="stamp" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 3v12" />
+        <path d="m7 11 5 5 5-5" />
+        <path d="M5 21h14" />
+      </svg>
+      下载 PNG
+    </button>
+  </header>
+
+  <main>
+    <aside class="deck">
+      <!-- 01 图片 -->
+      <section class="grp">
+        <h2 class="grp-h"><span class="num">01</span> 图片</h2>
+        <label class="drop" for="imageInput">
+          <span class="drop-ico">↥</span>
+          <strong>点击选择图片</strong>
+          <small>导出尺寸 = 原图尺寸 · 建议 1:1 或竖图</small>
+          <input id="imageInput" type="file" accept="image/*" hidden />
+        </label>
+        <button id="clearImageBtn" class="btn ghost-danger" type="button">清空图片</button>
+      </section>
+
+      <!-- 02 文案 -->
+      <section class="grp">
+        <h2 class="grp-h"><span class="num">02</span> 文案</h2>
+        <textarea id="memeText" spellcheck="false">第一次见女朋友家长叔叔问我：喝酒吗？
+我：不喝
+又问：抽烟吗？
+我：不抽
+叔叔又问：打牌吗？
+我：不打
+叔叔诧异的望向女朋友女朋友忙说：他好色！
+叔叔一拍大腿：那没事了是个正常男人来坐，上菜！</textarea>
+      </section>
+
+      <!-- 高级设置：03 样式 + 04 排版 -->
+      <details class="advanced">
+        <summary>
+          <span class="adv-label">高级设置</span>
+          <span class="adv-tag"></span>
+        </summary>
+        <div class="adv-body">
+          <!-- 03 样式 -->
+          <section class="grp">
+            <h2 class="grp-h"><span class="num">03</span> 样式</h2>
+            <div class="field">
+              <label class="fld" for="fontFamily">字体</label>
+              <select id="fontFamily">
+                <option value='-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif'>系统无衬线字体</option>
+                <option value='Arial, Helvetica, sans-serif'>Arial / Helvetica</option>
+                <option value='"Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif'>Noto Sans SC / 思源黑体</option>
+                <option value='"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif'>中文系统黑体</option>
+              </select>
+            </div>
+            <div class="grid-2">
+              <div class="field">
+                <label class="fld" for="fontWeight">字重</label>
+                <select id="fontWeight">
+                  <option value="600">半粗 600</option>
+                  <option value="700" selected>粗体 700</option>
+                  <option value="800">特粗 800</option>
+                  <option value="900">黑体 900</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="fld" for="textColor">文字颜色</label>
+                <input id="textColor" type="color" value="#000000" />
+              </div>
+            </div>
+            <div class="field">
+              <label class="fld" for="boxColor">衬底颜色</label>
+              <input id="boxColor" type="color" value="#ffffff" />
+            </div>
+          </section>
+
+          <!-- 04 排版 -->
+          <section class="grp">
+            <h2 class="grp-h"><span class="num">04</span> 排版</h2>
+            <div class="grid-2">
+              <div class="field">
+                <label class="fld">字号（占图宽）</label>
+                <div class="slider">
+                  <input id="fontSizePct" type="range" min="2" max="10" step="0.1" value="4.4" />
+                  <span id="fontSizePctValue" class="pill">4.4%</span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="fld">行距</label>
+                <div class="slider">
+                  <input id="lineHeight" type="range" min="1.0" max="2.0" step="0.05" value="1.6" />
+                  <span id="lineHeightValue" class="pill">1.60</span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="fld">衬底左右边距</label>
+                <div class="slider">
+                  <input id="padXPct" type="range" min="0.1" max="1.8" step="0.05" value="0.25" />
+                  <span id="padXPctValue" class="pill">0.25em</span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="fld">衬底高度</label>
+                <div class="slider">
+                  <input id="boxHeightEm" type="range" min="1.0" max="1.6" step="0.02" value="1.28" />
+                  <span id="boxHeightEmValue" class="pill">1.28em</span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="fld">衬底圆角</label>
+                <div class="slider">
+                  <input id="radiusEm" type="range" min="0" max="0.5" step="0.02" value="0" />
+                  <span id="radiusEmValue" class="pill">0em</span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="fld">单行最大宽度</label>
+                <div class="slider">
+                  <input id="maxWidthPct" type="range" min="40" max="96" step="1" value="82" />
+                  <span id="maxWidthPctValue" class="pill">82%</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </details>
+    </aside>
+
+    <section class="stage">
+      <div class="canvas-wrap">
+        <canvas id="canvas" width="1080" height="1080" aria-label="梗图预览"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
