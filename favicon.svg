@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="MEME">
+  <rect width="256" height="256" rx="40" fill="#0f0f11"/>
+  <path d="M36 50h184v156H36z" fill="#ffe100"/>
+  <path d="M54 72h148v112H54z" fill="#0f0f11"/>
+  <path d="M72 96h22l16 38 16-38h22v64h-17v-32l-14 32h-14l-14-32v32H72V96zm88 0h48v16h-30v9h27v15h-27v9h31v15h-49V96z" fill="#ffe100"/>
+  <path d="M45 210h132v16H45z" fill="#ff4d2e"/>
+</svg>

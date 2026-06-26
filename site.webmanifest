@@ -1,0 +1,21 @@
+{
+  "name": "MEME · 梗图实验室",
+  "short_name": "MEME",
+  "description": "上传图片，输入中文文案，一键导出高清梗图 PNG。",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0f0f11",
+  "theme_color": "#ffe100",
+  "icons": [
+    {
+      "src": "android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
