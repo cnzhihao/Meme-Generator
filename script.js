@@ -6,21 +6,7 @@
     const imageInput = $("imageInput");
     const agentImageUrl = $("agentImageUrl");
     const memeText = $("memeText");
-    const agentPrompt = `你现在要帮我把 Meme Generator 接入 OpenCLI，并安装用于自动生成梗图的 Skill。请按下面步骤执行，并在每一步完成后继续下一步：
-
-1. 检查本机 Node.js 版本是否 >= 21.0.0；如果版本不够，请告诉我需要先升级 Node.js。
-2. 安装或更新 OpenCLI：
-   npm install -g @jackwener/opencli
-3. 确认 Chrome 已安装 Browser Bridge 扩展：
-   https://chromewebstore.google.com/detail/browser-bridge/jbajonmonccnibicpjlfkkcenpjcpedo
-4. 运行诊断：
-   opencli doctor
-5. 安装 OpenCLI 浏览器 Skill：
-   npx skills add jackwener/opencli --skill opencli-browser
-6. 安装 Meme Generator Skill：
-   npx skills add cnzhihao/Meme-Generator --skill meme-generator
-
-安装完成后，后续我会用 $meme-generator 让你根据我的本地知识库目录、输出目录和梗图主题，自动打开 https://meme-generator.fhxqtech.com，选择段子和图片，生成 PNG，并保存到我指定的位置。`;
+    const agentPrompt = `请安装并使用 https://github.com/cnzhihao/Meme-Generator 里的 \`meme-creator\` Skill，把我的本地图片和文字生成中文梗图 PNG。图片路径是：\`/path/to/image.jpg\`。文字是：「你的文案」。如果 Skill 尚未安装，请先安装；如果当前会话不能自动加载，就读取该 Skill 的 \`SKILL.md\` 并按流程执行。`;
 
     const controls = [
       "fontFamily", "fontWeight", "textColor", "boxColor", "fontSizePct", "lineHeight",
